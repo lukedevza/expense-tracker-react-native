@@ -25,7 +25,7 @@ const Register = () => {
     setIsLoading(true);
     const res = await registerUser(emailRef.current, passwordRef.current, nameRef.current);
     setIsLoading(false);
-    console.log("register result:", res);
+
     if (!res.success) {
       Alert.alert("Sign up:", res.msg);
     }
