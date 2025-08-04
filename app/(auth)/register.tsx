@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
+import { useAuth } from "@/context/authContext";
 import { verticalScale } from "@/utils/styling";
 import { useRouter } from "expo-router";
 import * as Icons from "phosphor-react-native";
@@ -15,16 +16,19 @@ const Register = () => {
   const nameRef = useRef("");
   const emailRef = useRef("");
   const passwordRef = useRef("");
-
+  const { register: registerUser } = useAuth();
   const handleSubmit = async () => {
     if (!emailRef.current || !passwordRef.current || !nameRef.current) {
       Alert.alert("Login", "Please fill all the fields");
       return;
     }
-    console.log("Name:", nameRef.current);
-    console.log("email:", emailRef.current);
-    console.log("password:", passwordRef.current);
-    console.log("Send data to auth✅");
+    setIsLoading(true);
+    const res = await registerUser(emailRef.current, passwordRef.current, nameRef.current);
+    setIsLoading(false);
+    console.log("register result:", res);
+    if (!res.success) {
+      Alert.alert("Sign up:", res.msg);
+    }
   };
 
   return (
@@ -70,6 +74,7 @@ const Register = () => {
           <Input
             placeholder="Enter your email"
             onChangeText={(value) => (emailRef.current = value)}
+            keyboardType="email-address"
             icon={
               <Icons.AtIcon
                 size={verticalScale(26)}
