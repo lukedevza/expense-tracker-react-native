@@ -1,11 +1,36 @@
 import { colors, spacingX, spacingY } from "@/constants/theme";
+import { useAuth } from "@/context/authContext";
+import useFetchData from "@/hooks/useFetchData";
+import { WalletType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
+import { orderBy, where } from "firebase/firestore";
 import * as Icons from "phosphor-react-native";
 import React from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
+import LoadingDots from "./LoadingDots";
 import Typo from "./Typo";
 
 const HomeCard = () => {
+  const { user } = useAuth();
+  const {
+    data: wallets,
+    isLoading: walletIsLoading,
+    error: walletError,
+  } = useFetchData<WalletType>("wallets", [
+    where("uid", "==", user?.uid),
+    orderBy("created", "desc"),
+  ]);
+  const getTotals = () => {
+    return wallets.reduce(
+      (totals: any, item: WalletType) => {
+        totals.balance = totals.balance + Number(item.amount);
+        totals.income = totals.income + Number(item.totalIncome);
+        totals.expenses = totals.expenses + Number(item.totalExpenses);
+        return totals;
+      },
+      { balance: 0, income: 0, expenses: 0 }
+    );
+  };
   return (
     <ImageBackground
       source={require("../assets/images/card.png")}
@@ -33,7 +58,12 @@ const HomeCard = () => {
             size={30}
             fontWeight={"bold"}
           >
-            R24536.33
+            R
+            {walletIsLoading ? (
+              <LoadingDots color={colors.black} />
+            ) : (
+              getTotals()?.balance?.toFixed(2)
+            )}
           </Typo>
         </View>
         {/* total expenses and incomes */}
@@ -61,7 +91,12 @@ const HomeCard = () => {
                 color={colors.green}
                 fontWeight={"600"}
               >
-                R44654
+                R
+                {walletIsLoading ? (
+                  <LoadingDots color={colors.green} />
+                ) : (
+                  getTotals()?.income?.toFixed(2)
+                )}
               </Typo>
             </View>
           </View>
@@ -88,7 +123,12 @@ const HomeCard = () => {
                 color={colors.rose}
                 fontWeight={"600"}
               >
-                R44654
+                R
+                {walletIsLoading ? (
+                  <LoadingDots color={colors.rose} />
+                ) : (
+                  getTotals()?.expenses?.toFixed(2)
+                )}
               </Typo>
             </View>
           </View>
