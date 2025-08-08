@@ -61,7 +61,6 @@ const WalletModal = () => {
   };
 
   const onDelete = async () => {
-    console.log("deleting");
     if (!oldWallet?.id) return;
     setIsLoading(true);
     const res = await deleteWallet(oldWallet?.id);
