@@ -1,12 +1,7 @@
-import { Href } from "expo-router";
-import { Firestore, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { Icon } from "phosphor-react-native";
 import React, { ReactNode } from "react";
 import {
-  ActivityIndicator,
-  ActivityIndicatorProps,
-  ImageStyle,
-  PressableProps,
   TextInput,
   TextInputProps,
   TextProps,
@@ -143,10 +138,7 @@ export type UserDataType = {
 export type AuthContextType = {
   user: UserType;
   setUser: Function;
-  login: (
-    email: string,
-    password: string
-  ) => Promise<{ success: boolean; msg?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; msg?: string }>;
   register: (
     email: string,
     password: string,
@@ -170,4 +162,16 @@ export type WalletType = {
   image: any;
   uid?: string;
   created?: Date;
+};
+
+export type paramType = {
+  id: string;
+  type: string;
+  amount: string;
+  category?: string;
+  date: string;
+  description?: string;
+  image?: any;
+  uid?: string;
+  walletId: string;
 };

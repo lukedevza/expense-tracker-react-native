@@ -9,15 +9,14 @@ import { expenseCategories, transactionTypes } from "@/constants/data";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
 import useFetchData from "@/hooks/useFetchData";
-import { createOrUpdateTransaction } from "@/services/transactionService";
-import { deleteWallet } from "@/services/walletService";
-import { TransactionType, WalletType } from "@/types";
+import { createOrUpdateTransaction, deleteTransaction } from "@/services/transactionService";
+import { paramType, TransactionType, WalletType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { orderBy, where } from "firebase/firestore";
 import * as Icons from "phosphor-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -53,7 +52,7 @@ const TransactionModal = () => {
     where("uid", "==", user?.uid),
     orderBy("created", "desc"),
   ]);
-  const oldTransaction: { name: string; image: string; id: string } = useLocalSearchParams();
+  const oldTransaction: paramType = useLocalSearchParams();
 
   const onDateChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || transaction.date;
@@ -61,14 +60,19 @@ const TransactionModal = () => {
     setShowDatePicker(Platform.OS === "ios" ? true : false);
   };
 
-  // useEffect(() => {
-  //   if (transaction?.id) {
-  //     setTransaction({
-  //       name: oldTransaction.name,
-  //       image: oldTransaction.image,
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (oldTransaction?.id) {
+      setTransaction({
+        type: oldTransaction?.type,
+        image: oldTransaction?.image,
+        amount: Number(oldTransaction?.amount),
+        date: new Date(oldTransaction?.date),
+        walletId: oldTransaction?.walletId,
+        category: oldTransaction?.category || "",
+        description: oldTransaction?.description || "",
+      });
+    }
+  }, []);
 
   const onSubmit = async () => {
     const { type, amount, description, category, date, walletId, image } = transaction;
@@ -84,10 +88,11 @@ const TransactionModal = () => {
       category,
       date,
       walletId,
-      image,
+      image: image ? image : null,
       uid: user?.uid,
     };
     // todo: include transaction id for updating
+    if (oldTransaction?.id) transactionData.id = oldTransaction.id;
     setIsLoading(true);
     const res = await createOrUpdateTransaction(transactionData);
     setIsLoading(false);
@@ -99,27 +104,22 @@ const TransactionModal = () => {
   };
 
   const onDelete = async () => {
-    console.log("deleting");
     if (!oldTransaction?.id) return;
     setIsLoading(true);
-    const res = await deleteWallet(oldTransaction?.id);
+    const res = await deleteTransaction(oldTransaction?.id, oldTransaction?.walletId);
     setIsLoading(false);
     if (res.success) {
       router.back();
     } else {
-      Alert.alert("Wallet", res.msg);
+      Alert.alert("Transaction", res.msg);
     }
   };
 
   const showDeleteAlert = () => {
-    Alert.alert(
-      "Confirm",
-      "Are you sure you want to delete this wallet? \nThis action will remove all the transactions related to this wallet.",
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Delete", style: "destructive", onPress: () => onDelete() },
-      ]
-    );
+    Alert.alert("Confirm", "Are you sure you want to delete this transaction?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Delete", style: "destructive", onPress: () => onDelete() },
+    ]);
   };
 
   return (
@@ -188,7 +188,7 @@ const TransactionModal = () => {
                 itemContainerStyle={styles.dropdownItemContainer}
                 containerStyle={styles.dropdownListContainer}
                 data={wallets.map((wallet) => ({
-                  label: `${wallet.name} (${wallet.amount})`,
+                  label: `${wallet.name} (R${wallet.amount})`,
                   value: wallet.id,
                 }))}
                 maxHeight={300}

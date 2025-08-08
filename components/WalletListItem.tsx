@@ -53,7 +53,7 @@ const WalletListItem = ({
             size={14}
             color={colors.neutral400}
           >
-            R{item.amount}
+            R{item.amount! > 0 ? item.amount : 0}
           </Typo>
         </View>
         <Icons.CaretRightIcon
