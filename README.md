@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# 💰 Expense Tracker App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An **Expense Tracking** mobile application built with **Expo** and **React Native**, using **Firebase** for authentication & data storage and **Cloudinary** for image hosting.  
+Easily manage multiple wallets, track expenses and incomes across various categories, and visualize your financial habits with a statistics dashboard.
 
-## Get started
+---
 
-1. Install dependencies
+## ✨ Features
 
-   ```bash
-   npm install
-   ```
+- **Multi-Wallet Support** – Create and manage multiple wallets for different purposes.
+- **Expense & Income Tracking** – Add transactions with category, amount, and optional notes/images.
+- **Category Management** – Choose from predefined categories or create your own.
+- **Statistics Dashboard** – View detailed charts and summaries of your spending habits.
+- **Cloud Storage** – Store transaction images securely with **Cloudinary**.
+- **Secure Authentication** – Firebase Authentication for secure user sign-in.
+- **Cross-Platform** – Works on both Android and iOS.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 📸 Screenshots
 
-In the output, you'll find options to open the app in a
+<table>
+  <tr>
+    <th>Welcome</th>
+    <th>Register</th>
+    <th>Login</th>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/welcome_screen.jpg" width="250" /></td>
+    <td><img src="assets/screenshots/register_screen.jpg" width="250" /></td>
+    <td><img src="assets/screenshots/login_screen.jpg" width="250" /></td>
+  </tr>
+</table>
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+<table>
+  <tr>
+    <th>Home</th>
+    <th>Statistics</th>
+    <th>Wallets</th>
+    <th>Profile</th>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/home_tab.jpg" width="250" /></td>
+    <td><img src="assets/screenshots/statistics_tab.jpg" width="250" /></td>
+    <td><img src="assets/screenshots/wallets_tab.jpg" width="250" /></td>
+    <td><img src="assets/screenshots/profile_tab.jpg" width="250" /></td>
+    
+  </tr>
+</table>
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+<table>
+  <tr>
+    <th>Add Transaction</th>
+    <th>Search Transactions</th>
+   
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/transaction_modal.jpg" width="250" /></td>
+    <td><img src="assets/screenshots/search_modal.jpg" width="250" /></td>
+    
+    
+  </tr>
+</table>
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
